@@ -1,37 +1,39 @@
 trigger:
-  - main
+- main  # ya aapki branch
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
 variables:
-  imageName: clientorbitapp
+  imageName: 'myapp'
+  tag: 'latest'
 
 steps:
-  - task: Checkout@1
-    inputs:
-      clean: true
-    displayName: 'Checkout source code'
+# 1️⃣ Checkout the code
+- task: Checkout@1
+  displayName: 'Checkout repository'
 
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '18.x'
-    displayName: 'Install Node.js'
+# 2️⃣ Login to Docker Hub using service connection
+- task: Docker@2
+  displayName: 'Login to Docker Hub'
+  inputs:
+    command: login
+    containerRegistry: 'DockerHub'  # <- ye aapke service connection ka exact name
+    # username/password automatically use hoga service connection se
 
-  - script: |
-      npm install
-      npm run build
-    displayName: 'Build React/Vite app'
+# 3️⃣ Build Docker image
+- task: Docker@2
+  displayName: 'Build Docker Image'
+  inputs:
+    command: build
+    Dockerfile: '**/Dockerfile'
+    tags: |
+      $(imageName):$(tag)
 
-  - script: |
-      echo Logging in to Docker Hub...
-      echo $DOCKERHUBPASSWORD | docker login -u $DOCKERHUBUSERNAME --password-stdin
-      echo Building Docker image...
-      docker build -t $DOCKERHUBUSERNAME/$IMAGE_NAME:latest .
-      echo Pushing image to Docker Hub...
-      docker push $DOCKERHUBUSERNAME/$IMAGE_NAME:latest
-    env:
-      DOCKERHUBUSERNAME: $(dockerHubUsername)
-      DOCKERHUBPASSWORD: $(dockerHubPassword)
-      IMAGE_NAME: $(imageName)
-    displayName: 'Build and Push Docker Image manually'
+# 4️⃣ Push Docker image to Docker Hub
+- task: Docker@2
+  displayName: 'Push Docker Image'
+  inputs:
+    command: push
+    tags: |
+      $(imageName):$(tag)
