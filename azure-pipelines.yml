@@ -5,9 +5,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  imageName: clientorbitapp  # Docker image name
-  dockerHubUsername: 'YOUR_DOCKERHUB_USERNAME'
-  dockerHubPassword: 'YOUR_DOCKERHUB_PASSWORD'
+  imageName: clientorbitapp
 
 steps:
   - task: Checkout@1
@@ -27,9 +25,13 @@ steps:
 
   - script: |
       echo Logging in to Docker Hub...
-      echo $(dockerHubPassword) | docker login -u $(dockerHubUsername) --password-stdin
+      echo $DOCKERHUBPASSWORD | docker login -u $DOCKERHUBUSERNAME --password-stdin
       echo Building Docker image...
-      docker build -t $(dockerHubUsername)/$(imageName):latest .
+      docker build -t $DOCKERHUBUSERNAME/$IMAGE_NAME:latest .
       echo Pushing image to Docker Hub...
-      docker push $(dockerHubUsername)/$(imageName):latest
+      docker push $DOCKERHUBUSERNAME/$IMAGE_NAME:latest
+    env:
+      DOCKERHUBUSERNAME: $(dockerHubUsername)
+      DOCKERHUBPASSWORD: $(dockerHubPassword)
+      IMAGE_NAME: $(imageName)
     displayName: 'Build and Push Docker Image manually'
