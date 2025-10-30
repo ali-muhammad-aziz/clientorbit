@@ -5,7 +5,7 @@ pool:
   name: Default   # self-hosted agent pool
 
 variables:
-  imageName: 'myapp'
+  imageName: 'alimuhammad9291/clientorbitapp'   # <-- aapka Docker Hub username + repo
   tag: 'latest'
 
 steps:
