@@ -5,7 +5,7 @@ pool:
   name: Default   # self-hosted agent pool
 
 variables:
-  imageName: 'alimuhammad9291/clientorbitapp'   # <-- your Docker Hub username + repo
+  imageName: 'alimuhammad9291/clientorbitapp'  # <-- Docker Hub username + repo
   tag: 'latest'
 
 steps:
@@ -21,12 +21,12 @@ steps:
     command: build
     Dockerfile: '**/Dockerfile'
     tags: |
-      $(imageName):$(tag)   # this ensures proper tag
+      $(imageName):$(tag)   # ensures proper tagging
 
 - task: Docker@2
   displayName: 'Push Docker Image'
   inputs:
     command: push
-    containerRegistry: 'DockerHub'   # must include service connection
+    containerRegistry: 'DockerHub'   # must match service connection
     tags: |
       $(imageName):$(tag)
