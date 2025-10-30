@@ -1,0 +1,33 @@
+trigger:
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  imageName: clientorbitapp
+
+steps:
+  - task: Checkout@1
+    inputs:
+      clean: true
+
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '18.x'
+    displayName: 'Install Node.js'
+
+  - script: |
+      npm install
+      npm run build
+    displayName: 'Build React/Vite app'
+
+  - task: Docker@2
+    displayName: 'Build and Push Docker Image'
+    inputs:
+      containerRegistry: '<YourServiceConnectionName>'
+      repository: 'clientorbitapp'
+      command: 'buildAndPush'
+      Dockerfile: '**/Dockerfile'
+      tags: |
+        latest
