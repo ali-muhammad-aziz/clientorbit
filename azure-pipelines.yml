@@ -5,7 +5,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  imageName: clientorbitapp  # Docker image ka naam
+  imageName: clientorbitapp  # Docker image name
 
 steps:
   - task: Checkout@1
@@ -23,12 +23,12 @@ steps:
       npm run build
     displayName: 'Build React/Vite app'
 
-  - task: Docker@2
+  - task: Docker@1
     displayName: 'Build and Push Docker Image'
     inputs:
       containerRegistry: 'ClientOrbitDockerHub'  # Docker Hub service connection
       repository: 'clientorbitapp'
       command: 'buildAndPush'
-      Dockerfile: 'Dockerfile'  # root me Dockerfile hai
+      dockerFile: 'Dockerfile'  # root me Dockerfile
       tags: |
         latest
