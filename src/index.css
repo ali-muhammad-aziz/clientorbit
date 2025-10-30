@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Cyberpunk Dashboard Design System - All colors MUST be HSL */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    /* Cyberpunk Dark Theme */
+    --background: 220 25% 6%;
+    --foreground: 180 100% 90%;
+
+    /* Neon Color Palette */
+    --neon-cyan: 180 100% 50%;
+    --neon-purple: 280 100% 70%;
+    --neon-pink: 320 100% 75%;
+    --neon-green: 120 100% 60%;
+    --neon-blue: 200 100% 65%;
+
+    /* Glassmorphism Cards */
+    --card: 220 25% 8%;
+    --card-foreground: 180 100% 90%;
+    --glass: 220 25% 12%;
+    --glass-border: 180 50% 25%;
+
+    /* Interactive Elements */
+    --primary: 180 100% 50%;
+    --primary-foreground: 220 25% 6%;
+    --primary-glow: 180 100% 40%;
+
+    --secondary: 280 80% 60%;
+    --secondary-foreground: 180 100% 90%;
+    --secondary-glow: 280 80% 45%;
+
+    /* Status Colors */
+    --success: 120 100% 50%;
+    --warning: 45 100% 60%;
+    --error: 0 100% 65%;
+    --info: 200 100% 60%;
+
+    /* Surfaces */
+    --muted: 220 20% 12%;
+    --muted-foreground: 180 30% 60%;
+    --accent: 320 100% 60%;
+    --accent-foreground: 220 25% 6%;
+
+    /* Borders & Inputs */
+    --border: 180 30% 20%;
+    --input: 220 20% 15%;
+    --ring: 180 100% 50%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--neon-cyan)), hsl(var(--neon-blue)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--neon-purple)), hsl(var(--neon-pink)));
+    --gradient-dark: linear-gradient(135deg, hsl(var(--background)), hsl(var(--card)));
+    --gradient-glow: radial-gradient(circle at center, hsl(var(--neon-cyan) / 0.2), transparent 70%);
+    --gradient-radial: radial-gradient(circle at center, var(--tw-gradient-stops));
+
+    /* Shadows & Glows */
+    --shadow-neon: 0 0 20px hsl(var(--neon-cyan) / 0.5), 0 0 40px hsl(var(--neon-cyan) / 0.3);
+    --shadow-purple: 0 0 20px hsl(var(--neon-purple) / 0.5), 0 0 40px hsl(var(--neon-purple) / 0.3);
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-rajdhani;
+    background: var(--gradient-dark);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-orbitron;
+  }
+}
+
+@layer components {
+  /* Glassmorphism Effects */
+  .glass {
+    background: hsl(var(--glass) / 0.1);
+    backdrop-filter: blur(16px) saturate(1.8);
+    border: 1px solid hsl(var(--glass-border) / 0.3);
+    box-shadow: var(--shadow-glass);
+  }
+
+  .glass-intense {
+    background: hsl(var(--glass) / 0.2);
+    backdrop-filter: blur(20px) saturate(2);
+    border: 1px solid hsl(var(--glass-border) / 0.4);
+    box-shadow: var(--shadow-glass);
+  }
+
+  /* Neon Glow Effects */
+  .glow-cyan {
+    box-shadow: var(--shadow-neon);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .glow-purple {
+    box-shadow: var(--shadow-purple);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .hover-glow-cyan:hover {
+    box-shadow: var(--shadow-neon), 0 0 60px hsl(var(--neon-cyan) / 0.4);
+  }
+
+  .hover-glow-purple:hover {
+    box-shadow: var(--shadow-purple), 0 0 60px hsl(var(--neon-purple) / 0.4);
+  }
+
+  /* Cyberpunk Grid Pattern */
+  .cyber-grid {
+    background-image: 
+      linear-gradient(hsl(var(--neon-cyan) / 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--neon-cyan) / 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* Animated Borders */
+  .border-animate {
+    position: relative;
+    background: linear-gradient(var(--angle, 0deg), 
+      hsl(var(--neon-cyan)), 
+      hsl(var(--neon-purple)), 
+      hsl(var(--neon-pink)),
+      hsl(var(--neon-cyan))
+    ) border-box;
+    border: 2px solid transparent;
+    animation: rotate 4s linear infinite;
+  }
+
+  @keyframes rotate {
+    to {
+      --angle: 360deg;
+    }
+  }
+
+  @property --angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  /* Pulse Animation */
+  .pulse-neon {
+    animation: pulse-neon 2s infinite;
+  }
+
+  @keyframes pulse-neon {
+    0%, 100% {
+      box-shadow: 0 0 5px hsl(var(--neon-cyan) / 0.5);
+    }
+    50% {
+      box-shadow: var(--shadow-neon);
+    }
+  }
+
+  /* Data Visualization Styles */
+  .chart-glow {
+    filter: drop-shadow(0 0 8px hsl(var(--neon-cyan) / 0.6));
+  }
+}
