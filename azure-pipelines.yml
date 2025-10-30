@@ -2,7 +2,7 @@ trigger:
 - main
 
 pool:
-  name: Default
+  name: Default   # self-hosted agent pool
 
 variables:
   imageName: 'myapp'
