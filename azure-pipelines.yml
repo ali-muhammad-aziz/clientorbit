@@ -2,31 +2,18 @@ trigger:
 - main
 
 pool:
-  name: Default   # self-hosted agent pool
+  name: Default
 
 variables:
-  imageName: 'alimuhammad9291/clientorbitapp'  # Docker Hub username + repo
+  imageName: 'alimuhammad9291/clientorbitapp'
   tag: 'latest'
 
 steps:
 - task: Docker@2
-  displayName: 'Login to Docker Hub'
+  displayName: 'Build and Push Docker Image'
   inputs:
-    command: login
-    containerRegistry: 'DockerHubConnection'   # exact service connection name
-
-- task: Docker@2
-  displayName: 'Build Docker Image'
-  inputs:
-    command: build
+    containerRegistry: 'DockerHubConnection'    # exact service connection name
+    repository: 'alimuhammad9291/clientorbitapp'
+    command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
-    tags: |
-      $(imageName):$(tag)
-
-- task: Docker@2
-  displayName: 'Push Docker Image'
-  inputs:
-    command: push
-    containerRegistry: 'DockerHubConnection'
-    tags: |
-      $(imageName):$(tag)
+    tags: '$(tag)'
