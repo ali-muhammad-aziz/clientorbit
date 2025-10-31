@@ -1,19 +1,38 @@
 trigger:
-  - main
+  branches:
+    include:
+      - main   # Auto-trigger on main branch
 
 pool:
-  name: Default
+  name: Default  # Azure DevOps agent pool
 
 variables:
   imageName: "alimuhammad9291/clientorbitapp"
   tag: "latest"
 
 steps:
+  # 1️⃣ Docker Build & Push
   - task: Docker@2
     displayName: "Build and Push Docker Image"
     inputs:
-      containerRegistry: "DockerHubConnection" # exact service connection name
+      containerRegistry: "DockerHubConnection" # Exact service connection name
       repository: "alimuhammad9291/clientorbitapp"
       command: "buildAndPush"
       Dockerfile: "**/Dockerfile"
       tags: "$(tag)"
+
+  # 2️⃣ Terraform Init
+  - script: terraform init
+    displayName: "Terraform Init"
+
+  # 3️⃣ Terraform Apply
+  - script: terraform apply -auto-approve
+    displayName: "Terraform Apply"
+
+  # 4️⃣ Minikube Status
+  - script: minikube status
+    displayName: "Check Minikube Status"
+
+  # 5️⃣ Deploy to Minikube using kubectl
+  - script: kubectl apply -f kubernetes-bootcamp.yaml
+    displayName: "Deploy to Minikube"
