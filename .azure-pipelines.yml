@@ -1,25 +1,27 @@
-# Azure Pipelines YAML - Auto-trigger on main branch
-
 trigger:
   branches:
     include:
-      - main # Jab bhi main branch me push ho, pipeline run ho
+      - main
 
 pool:
-  vmImage: "ubuntu-latest" # Hosted agent VM
+  name: Default # self-hosted agent pool
+
+variables:
+  imageName: "alimuhammad9291/clientorbitapp"
+  tag: "latest"
 
 steps:
-  - task: Checkout@1
-    displayName: "Checkout repository"
+  - task: Docker@2
+    displayName: "Login to Docker Hub"
+    inputs:
+      containerRegistry: "DockerHubConnection"
+      command: login
 
-  # Example build step (adjust according to your project)
-  - script: echo "Building the project..."
-    displayName: "Build Step"
-
-  # Example test step (adjust according to your project)
-  - script: echo "Running tests..."
-    displayName: "Test Step"
-
-  # Example deploy step (adjust according to your project)
-  - script: echo "Deploying application..."
-    displayName: "Deploy Step"
+  - task: Docker@2
+    displayName: "Build and Push Docker Image"
+    inputs:
+      containerRegistry: "DockerHubConnection"
+      repository: "alimuhammad9291/clientorbitapp"
+      command: "buildAndPush"
+      Dockerfile: "**/Dockerfile"
+      tags: "latest"
