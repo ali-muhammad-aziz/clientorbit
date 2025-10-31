@@ -1,5 +1,7 @@
 trigger:
-  - main
+  branches:
+    include:
+      - main
 
 pool:
   name: Default # self-hosted agent pool
