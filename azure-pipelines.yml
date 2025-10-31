@@ -1,19 +1,17 @@
 trigger:
-- main
+  branches:
+    include:
+      - main
 
 pool:
-  name: Default
-
-variables:
-  imageName: 'alimuhammad9291/clientorbitapp'
-  tag: 'latest'
+  vmImage: "ubuntu-latest"
 
 steps:
-- task: Docker@2
-  displayName: 'Build and Push Docker Image'
-  inputs:
-    containerRegistry: 'DockerHubConnection'    # exact service connection name
-    repository: 'alimuhammad9291/clientorbitapp'
-    command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
-    tags: '$(tag)'
+  - task: Checkout@1
+    displayName: "Checkout repository"
+  - script: echo "Building the project..."
+    displayName: "Build Step"
+  - script: echo "Running tests..."
+    displayName: "Test Step"
+  - script: echo "Deploying application..."
+    displayName: "Deploy Step"
